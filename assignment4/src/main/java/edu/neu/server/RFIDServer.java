@@ -1,13 +1,19 @@
 package edu.neu.server;
 
+import java.sql.SQLException;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import edu.neu.server.dao.SkierDataDao;
 import edu.neu.server.model.SkierData;
 import edu.neu.server.model.SkierMetrics;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.sql.SQLException;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Root resource (exposed at "/" path)
@@ -36,7 +42,6 @@ public class RFIDServer {
         getMetrics.add(new SkierMetrics(startTime, endTime - startTime));
         return output;
     }
-
     @Path("load")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
