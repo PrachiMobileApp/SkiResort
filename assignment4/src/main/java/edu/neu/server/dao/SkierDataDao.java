@@ -28,7 +28,8 @@ public class SkierDataDao {
 
     public SkierData insert(SkierData skierData, int verticalMetres) throws SQLException {
         String insertSkier = "INSERT INTO skierdata(resort_id, day_num, skier_id, lift_id, time, vertical) " + "values (?,?,?,?,?,?);";
-        try (Connection connection = connectionManager.getConnection(); PreparedStatement insertStmt = connection.prepareStatement(insertSkier)) {
+        Connection connection = connectionManager.getConnection();
+        try (PreparedStatement insertStmt = connection.prepareStatement(insertSkier)) {
             insertStmt.setInt(1, skierData.getResortID());
             insertStmt.setInt(2, skierData.getDayNum());
             insertStmt.setInt(3, skierData.getSkierID());
@@ -40,16 +41,18 @@ public class SkierDataDao {
         } catch (SQLException ex) {
             Logger.getLogger(SkierDataDao.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
+        } finally {
+            if(connection != null) connection.close();
         }
     }
 
     public String getDataBySkierIdAndDay(int skierId, int dayNum) throws SQLException {
-        ResultSet results = null;
         String selectSkierData = "SELECT COUNT(*), SUM(vertical) FROM skierdata WHERE skier_id = ? AND day_num = ?;";
         String totalLifts = "Total Lifts = ";
         String totalVertical = " Total Vertical(in metres) = ";
-
-        try(Connection connection = connectionManager.getConnection(); PreparedStatement selectStmt = connection.prepareStatement(selectSkierData)) {
+        Connection connection = connectionManager.getConnection();
+        ResultSet results = null;
+        try(PreparedStatement selectStmt = connection.prepareStatement(selectSkierData)) {
             selectStmt.setInt(1, skierId);
             selectStmt.setInt(2, dayNum);
             results = selectStmt.executeQuery();
@@ -63,17 +66,21 @@ public class SkierDataDao {
             throw ex;
         } finally {
             if(results != null) results.close();
+            if(connection != null) connection.close();
         }
         return null;
     }
 
     public void delete() throws SQLException {
         String deleteSkierData = "DELETE FROM skierdata;";
-        try(Connection connection = connectionManager.getConnection(); PreparedStatement deleteStmt = connection.prepareStatement(deleteSkierData)) {
+        Connection connection = connectionManager.getConnection();
+        try(PreparedStatement deleteStmt = connection.prepareStatement(deleteSkierData)) {
             deleteStmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(SkierDataDao.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
+        } finally {
+            if(connection != null) connection.close();
         }
     }
 }
