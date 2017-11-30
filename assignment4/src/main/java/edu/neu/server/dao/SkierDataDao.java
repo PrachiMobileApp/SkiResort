@@ -1,18 +1,21 @@
 package edu.neu.server.dao;
 
-import edu.neu.server.model.SkierData;
-import edu.neu.server.util.ConnectionManager;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import edu.neu.server.model.SkierData;
+import edu.neu.server.util.ConnectionManager;
+
 
 public class SkierDataDao {
-    protected ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
     private static SkierDataDao instance = null;
 
-    protected SkierDataDao() {
+    private SkierDataDao() {
         connectionManager = new ConnectionManager();
     }
 
