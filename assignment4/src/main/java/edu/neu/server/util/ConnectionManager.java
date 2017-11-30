@@ -3,6 +3,7 @@ package edu.neu.server.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +26,14 @@ public class ConnectionManager {
      */
     public Connection getConnection() throws SQLException {
         Connection connection = null;
+        Statement statement = null;
+        String createTable = "CREATE TABLE IF NOT EXISTS skierdata "
+                + "(resort_id INT, "
+                + " day_num INT, "
+                + " skier_id INT, "
+                + " lift_id INT, "
+                + " time INT, "
+                + " vertical INT)";
         try {
             Properties connectionProperties = new Properties();
             connectionProperties.put("user", USER);
@@ -41,6 +50,8 @@ public class ConnectionManager {
             }
             connection = (Connection) DriverManager.getConnection("jdbc:mysql://" + HOST_NAME + ":" +
                     PORT + "/" + SCHEME, connectionProperties);
+            statement = connection.createStatement();
+            statement.executeUpdate(createTable);
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
