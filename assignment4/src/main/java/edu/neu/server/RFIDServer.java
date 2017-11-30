@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Root resource (exposed at "/" path)
  */
-@Path("/")
+@Path("myresource")
 public class RFIDServer {
     private static final SkierDataDao skierDataDao = SkierDataDao.getInstance();
     private static final int[] VERTICAL_VALUES = {200,300,400,500};
@@ -51,6 +51,13 @@ public class RFIDServer {
     private int calculateVertical(int liftID) {
         int verticalIndex = (liftID - 1) / 10;
         return VERTICAL_VALUES[verticalIndex];
+    }
+
+    @Path("/test")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String test() {
+        return "Working";
     }
 
     @Path("metrics/{requestType}")
